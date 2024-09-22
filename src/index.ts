@@ -1,15 +1,16 @@
-import express, { type Express, type Request, type Response } from 'express';
-import dotenv from 'dotenv';
+import express, { type Application } from 'express';
+import cors from 'cors';
+import AppRoute from '@/api';
 
 export const init = (): void => {
-  dotenv.config();
-
-  const app: Express = express();
+  const app: Application = express();
   const port = process.env.PORT ?? 3000;
 
-  app.get('/', (req: Request, res: Response) => {
-    res.send('Express + TypeScript Server');
-  });
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  AppRoute(app);
 
   app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
